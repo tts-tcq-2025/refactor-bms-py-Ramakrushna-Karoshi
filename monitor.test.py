@@ -85,4 +85,6 @@ class TestMonitorIOFunctions(unittest.TestCase):
         self.assertFalse(vitals_ok(98.6, 72, 85))
         mock_alert.assert_called_once()
 
-if __name__
+if __name__ == '__main__':
+    unittest.main()
+
