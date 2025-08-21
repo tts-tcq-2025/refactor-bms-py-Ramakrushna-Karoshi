@@ -46,3 +46,11 @@ Shorten the Semantic distance
 - Functional to express relation between input and output
 - Object oriented to encapsulate state with actions
 - Aspect oriented to capture repeating aspects
+
+## Extension Implemented
+
+**Early Warning:**  
+Care-givers receive warning messages when vital signs approach critical thresholds (within 1.5% of the upper/lower limit), in addition to alarms for out-of-range values.
+
+- Warning ranges are calculated for temperature, pulse rate, and SpO2.
+- Example: For temperature range 95–102, warnings are shown for 95–96.53 and 100.47–102.
