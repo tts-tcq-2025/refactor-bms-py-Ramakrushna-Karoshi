@@ -1,312 +1,56 @@
-# import unittest
-# from monitor import vitals_ok
-
-
-# class MonitorTest(unittest.TestCase):
-#     def test_not_ok_when_any_vital_out_of_range(self):
-#         self.assertFalse(vitals_ok(99, 102, 70))
-#         self.assertTrue(vitals_ok(98.1, 70, 98))
-
-
-# if __name__ == '__main__':
-#   unittest.main()
-
-
-#*********************************************************************************************************#
-
-# import unittest
-# from monitor import (
-#     is_temperature_ok,
-#     is_pulse_rate_ok,
-#     is_spo2_ok,
-#     check_vitals,
-#     vitals_ok
-# )
-# from unittest.mock import patch
-
-# class TestMonitorPureFunctions(unittest.TestCase):
-#     def test_is_temperature_ok(self):
-#         self.assertTrue(is_temperature_ok(95))
-#         self.assertTrue(is_temperature_ok(102))
-#         self.assertTrue(is_temperature_ok(98.6))
-#         self.assertFalse(is_temperature_ok(94.9))
-#         self.assertFalse(is_temperature_ok(102.1))
-
-#     def test_is_pulse_rate_ok(self):
-#         self.assertTrue(is_pulse_rate_ok(60))
-#         self.assertTrue(is_pulse_rate_ok(100))
-#         self.assertTrue(is_pulse_rate_ok(80))
-#         self.assertFalse(is_pulse_rate_ok(59))
-#         self.assertFalse(is_pulse_rate_ok(101))
-
-#     def test_is_spo2_ok(self):
-#         self.assertTrue(is_spo2_ok(90))
-#         self.assertTrue(is_spo2_ok(95))
-#         self.assertFalse(is_spo2_ok(89))
-
-#     def test_check_vitals_all_ok(self):
-#         ok, msg = check_vitals(98, 80, 95)
-#         self.assertTrue(ok)
-#         self.assertIsNone(msg)
-
-#     def test_check_vitals_temperature_critical(self):
-#         ok, msg = check_vitals(94, 80, 95)
-#         self.assertFalse(ok)
-#         self.assertEqual(msg, 'Temperature critical!')
-
-#     def test_check_vitals_pulse_critical(self):
-#         ok, msg = check_vitals(98, 101, 95)
-#         self.assertFalse(ok)
-#         self.assertEqual(msg, 'Pulse Rate is out of range!')
-
-#     def test_check_vitals_spo2_critical(self):
-#         ok, msg = check_vitals(98, 80, 89)
-#         self.assertFalse(ok)
-#         self.assertEqual(msg, 'Oxygen Saturation out of range!')
-
-# class TestMonitorIOFunctions(unittest.TestCase):
-#     @patch('monitor.animate_alert')
-#     def test_vitals_ok_true(self, mock_alert):
-#         self.assertTrue(vitals_ok(98.6, 72, 96))
-#         mock_alert.assert_not_called()
-
-#     @patch('monitor.animate_alert')
-#     def test_vitals_not_ok_temperature(self, mock_alert):
-#         self.assertFalse(vitals_ok(104, 72, 96))
-#         mock_alert.assert_called_once()
-
-#     @patch('monitor.animate_alert')
-#     def test_vitals_not_ok_pulse(self, mock_alert):
-#         self.assertFalse(vitals_ok(98.6, 110, 96))
-#         mock_alert.assert_called_once()
-
-#     @patch('monitor.animate_alert')
-#     def test_vitals_not_ok_spo2(self, mock_alert):
-#         self.assertFalse(vitals_ok(98.6, 72, 85))
-#         mock_alert.assert_called_once()
-
-# if __name__ == '__main__':
-#     unittest.main()
-
-
-
-#*****************************************#
-
-# import unittest
-# from monitor import (
-#     is_temperature_ok,
-#     is_pulse_rate_ok,
-#     is_spo2_ok,
-#     check_vitals,
-#     vitals_ok,
-#     Vitals
-# )
-# from unittest.mock import patch
-
-# class TestMonitorFunctional(unittest.TestCase):
-#     def test_is_temperature_ok(self):
-#         self.assertTrue(is_temperature_ok(95))
-#         self.assertTrue(is_temperature_ok(102))
-#         self.assertFalse(is_temperature_ok(94))
-#         self.assertFalse(is_temperature_ok(103))
-
-#     def test_is_pulse_rate_ok(self):
-#         self.assertTrue(is_pulse_rate_ok(60))
-#         self.assertTrue(is_pulse_rate_ok(100))
-#         self.assertFalse(is_pulse_rate_ok(59))
-#         self.assertFalse(is_pulse_rate_ok(101))
-
-#     def test_is_spo2_ok(self):
-#         self.assertTrue(is_spo2_ok(90))
-#         self.assertTrue(is_spo2_ok(95))
-#         self.assertFalse(is_spo2_ok(89))
-
-#     def test_check_vitals_all_ok(self):
-#         ok, msg = check_vitals(98, 80, 95)
-#         self.assertTrue(ok)
-#         self.assertIsNone(msg)
-
-#     def test_check_vitals_temperature_critical(self):
-#         ok, msg = check_vitals(94, 80, 95)
-#         self.assertFalse(ok)
-#         self.assertEqual(msg, 'Temperature critical!')
-
-#     def test_check_vitals_pulse_critical(self):
-#         ok, msg = check_vitals(98, 101, 95)
-#         self.assertFalse(ok)
-#         self.assertEqual(msg, 'Pulse Rate is out of range!')
-
-#     def test_check_vitals_spo2_critical(self):
-#         ok, msg = check_vitals(98, 80, 89)
-#         self.assertFalse(ok)
-#         self.assertEqual(msg, 'Oxygen Saturation out of range!')
-
-# class TestMonitorProceduralAndAspect(unittest.TestCase):
-#     @patch('monitor.animate_alert')
-#     def test_vitals_ok_true(self, mock_alert):
-#         self.assertTrue(vitals_ok(98.6, 72, 96))
-#         mock_alert.assert_not_called()
-
-#     @patch('monitor.animate_alert')
-#     def test_vitals_not_ok_temperature(self, mock_alert):
-#         self.assertFalse(vitals_ok(104, 72, 96))
-#         mock_alert.assert_called_once()
-
-#     @patch('monitor.animate_alert')
-#     def test_vitals_not_ok_pulse(self, mock_alert):
-#         self.assertFalse(vitals_ok(98.6, 110, 96))
-#         mock_alert.assert_called_once()
-
-#     @patch('monitor.animate_alert')
-#     def test_vitals_not_ok_spo2(self, mock_alert):
-#         self.assertFalse(vitals_ok(98.6, 72, 85))
-#         mock_alert.assert_called_once()
-
-# class TestMonitorObjectOriented(unittest.TestCase):
-#     @patch('monitor.animate_alert')
-#     def test_vitals_object_status_ok(self, mock_alert):
-#         v = Vitals(98, 80, 95)
-#         ok, msg = v.status()
-#         self.assertTrue(ok)
-#         self.assertIsNone(msg)
-#         self.assertTrue(v.check_and_alert())
-#         mock_alert.assert_not_called()
-
-#     @patch('monitor.animate_alert')
-#     def test_vitals_object_status_not_ok(self, mock_alert):
-#         v = Vitals(104, 80, 95)
-#         ok, msg = v.status()
-#         self.assertFalse(ok)
-#         self.assertEqual(msg, 'Temperature critical!')
-#         self.assertFalse(v.check_and_alert())
-#         mock_alert.assert_called_once()
-
-# if __name__ == '__main__':
-#     unittest.main()
-
-
-
-#*****************************************#
-#*****************************************#
-#*****************************************#
-
 import unittest
-from monitor import (
-    is_value_in_range,
-    is_spo2_ok,
-    check_vitals,
-    vitals_ok,
-    Vitals
-)
-from unittest.mock import patch
+from monitor import check_vitals_with_warning
 
-class TestMonitorFunctional(unittest.TestCase):
-    def test_is_value_in_range(self):
-        # Temperature and pulse rate checks
-        self.assertTrue(is_value_in_range(95, 95, 102))
-        self.assertTrue(is_value_in_range(102, 95, 102))
-        self.assertFalse(is_value_in_range(94, 95, 102))
-        self.assertFalse(is_value_in_range(103, 95, 102))
-        # Pulse rate
-        self.assertTrue(is_value_in_range(60, 60, 100))
-        self.assertTrue(is_value_in_range(100, 60, 100))
-        self.assertFalse(is_value_in_range(59, 60, 100))
-        self.assertFalse(is_value_in_range(101, 60, 100))
-
-    def test_is_spo2_ok(self):
-        self.assertTrue(is_spo2_ok(90))
-        self.assertTrue(is_spo2_ok(95))
-        self.assertFalse(is_spo2_ok(89))
-        self.assertTrue(is_spo2_ok(92, min_value=92))
-        self.assertFalse(is_spo2_ok(91, min_value=92))
-
-    def test_check_vitals_all_ok(self):
-        ok, msg = check_vitals(98, 80, 95)
+class TestEarlyWarningTransformations(unittest.TestCase):
+    def test_temperature_near_hypothermia(self):
+        ok, msg = check_vitals_with_warning(95.5, 80, 95)
         self.assertTrue(ok)
-        self.assertIsNone(msg)
+        self.assertEqual(msg, 'Warning: Approaching hypothermia')
 
-    def test_check_vitals_temperature_critical(self):
-        ok, msg = check_vitals(94, 80, 95)
+    def test_temperature_near_hyperthermia(self):
+        ok, msg = check_vitals_with_warning(101.5, 80, 95)
+        self.assertTrue(ok)
+        self.assertEqual(msg, 'Warning: Approaching hyperthermia')
+
+    def test_temperature_hypothermia(self):
+        ok, msg = check_vitals_with_warning(94.5, 80, 95)
         self.assertFalse(ok)
         self.assertIn('Temperature out of range', msg)
 
-    def test_check_vitals_pulse_critical(self):
-        ok, msg = check_vitals(98, 101, 95)
+    def test_temperature_hyperthermia(self):
+        ok, msg = check_vitals_with_warning(102.5, 80, 95)
         self.assertFalse(ok)
-        self.assertIn('Pulse Rate out of range', msg)
+        self.assertIn('Temperature out of range', msg)
 
-    def test_check_vitals_spo2_critical(self):
-        ok, msg = check_vitals(98, 80, 89)
+    def test_temperature_normal(self):
+        ok, msg = check_vitals_with_warning(98.0, 80, 95)
+        self.assertTrue(ok)
+        self.assertIsNone(msg)
+
+    def test_spo2_near_hypoxemia(self):
+        ok, msg = check_vitals_with_warning(98, 80, 90.5)
+        self.assertTrue(ok)
+        self.assertEqual(msg, 'Warning: Approaching hypoxemia')
+
+    def test_spo2_hypoxemia(self):
+        ok, msg = check_vitals_with_warning(98, 80, 89)
         self.assertFalse(ok)
         self.assertIn('Oxygen Saturation out of range', msg)
 
-    def test_check_vitals_custom_ranges(self):
-        ok, msg = check_vitals(97, 70, 93, temp_range=(96, 98), pulse_range=(65, 75), spo2_min=92)
+    def test_pulse_near_bradycardia(self):
+        ok, msg = check_vitals_with_warning(98, 61.5, 95)
         self.assertTrue(ok)
-        ok, msg = check_vitals(95, 70, 93, temp_range=(96, 98), pulse_range=(65, 75), spo2_min=92)
-        self.assertFalse(ok)
-        self.assertIn('Temperature out of range', msg)
+        self.assertEqual(msg, 'Warning: Approaching bradycardia')
 
-class TestMonitorProceduralAndAspect(unittest.TestCase):
-    @patch('monitor.animate_alert')
-    def test_vitals_ok_true(self, mock_alert):
-        self.assertTrue(vitals_ok(98.6, 72, 96))
-        mock_alert.assert_not_called()
+    def test_pulse_near_tachycardia(self):
+        ok, msg = check_vitals_with_warning(98, 98.5, 95)
+        self.assertTrue(ok)
+        self.assertEqual(msg, 'Warning: Approaching tachycardia')
 
-    @patch('monitor.animate_alert')
-    def test_vitals_not_ok_temperature(self, mock_alert):
-        self.assertFalse(vitals_ok(104, 72, 96))
-        mock_alert.assert_called_once()
-
-    @patch('monitor.animate_alert')
-    def test_vitals_not_ok_pulse(self, mock_alert):
-        self.assertFalse(vitals_ok(98.6, 110, 96))
-        mock_alert.assert_called_once()
-
-    @patch('monitor.animate_alert')
-    def test_vitals_not_ok_spo2(self, mock_alert):
-        self.assertFalse(vitals_ok(98.6, 72, 85))
-        mock_alert.assert_called_once()
-
-    @patch('monitor.animate_alert')
-    def test_vitals_ok_custom_ranges(self, mock_alert):
-        self.assertTrue(vitals_ok(97, 70, 93, temp_range=(96, 98), pulse_range=(65, 75), spo2_min=92))
-        mock_alert.assert_not_called()
-
-class TestMonitorObjectOriented(unittest.TestCase):
-    @patch('monitor.animate_alert')
-    def test_vitals_object_status_ok(self, mock_alert):
-        v = Vitals(98, 80, 95)
-        ok, msg = v.status()
+    def test_pulse_normal(self):
+        ok, msg = check_vitals_with_warning(98, 80, 95)
         self.assertTrue(ok)
         self.assertIsNone(msg)
-        self.assertTrue(v.check_and_alert())
-        mock_alert.assert_not_called()
 
-    @patch('monitor.animate_alert')
-    def test_vitals_object_status_not_ok(self, mock_alert):
-        v = Vitals(104, 80, 95)
-        ok, msg = v.status()
-        self.assertFalse(ok)
-        self.assertIn('Temperature out of range', msg)
-        self.assertFalse(v.check_and_alert())
-        mock_alert.assert_called_once()
-
-    @patch('monitor.animate_alert')
-    def test_vitals_object_custom_ranges(self, mock_alert):
-        v = Vitals(97, 70, 93, temp_range=(96, 98), pulse_range=(65, 75), spo2_min=92)
-        ok, msg = v.status()
-        self.assertTrue(ok)
-        self.assertTrue(v.check_and_alert())
-        mock_alert.assert_not_called()
-        v2 = Vitals(95, 70, 93, temp_range=(96, 98), pulse_range=(65, 75), spo2_min=92)
-        ok, msg = v2.status()
-        self.assertFalse(ok)
-        self.assertIn('Temperature out of range', msg)
-        self.assertFalse(v2.check_and_alert())
-        mock_alert.assert_called()
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-
-
