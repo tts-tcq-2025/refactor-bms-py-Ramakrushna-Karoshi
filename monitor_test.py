@@ -1,6 +1,7 @@
 import unittest
 from monitor import check_vitals_with_warning
 
+
 class TestEarlyWarningTransformations(unittest.TestCase):
     def test_temperature_near_hypothermia(self):
         """Test temperature just above lower bound triggers hypothermia warning."""
