@@ -5,67 +5,54 @@ def get_warning_ranges(min_value, max_value, tolerance_percent=1.5):
     return near_low, near_high
 
 
-def _check_below(value, min_val, label, max_val=None):
+def check_range_with_warnings(value, min_val, max_val, label,
+                              low_msg=None, high_msg=None,
+                              tolerance_percent=1.5):
+    """
+    Generic checker for vitals with upper and lower bounds.
+    Returns (ok: bool, msg: str or None).
+    """
+    near_low, near_high = get_warning_ranges(min_val, max_val, tolerance_percent)
+
     if value < min_val:
-        if max_val:
-            return False, f"{label} out of range! ({min_val}-{max_val})"
-        return False, f"{label} below minimum {min_val}"
-    return None
-
-
-def _check_above(value, max_val, label, min_val=None):
+        return False, f"{label} out of range! ({min_val}-{max_val})"
     if value > max_val:
-        if min_val:
-            return False, f"{label} out of range! ({min_val}-{max_val})"
-        return False, f"{label} above maximum {max_val}"
-    return None
-
-
-def _check_warning(value, near_low, near_high, low_msg, high_msg):
-    if near_low[0] < value <= near_low[1]:
+        return False, f"{label} out of range! ({min_val}-{max_val})"
+    if low_msg and min_val < value <= near_low[1]:
         return True, f"Warning: {low_msg}"
-    if near_high[0] <= value < near_high[1]:
+    if high_msg and near_high[0] <= value < max_val:
         return True, f"Warning: {high_msg}"
-    return None
+    return True, None
 
 
 def check_temperature(temp, temp_range=(95, 102)):
-    near_low, near_high = get_warning_ranges(*temp_range)
-    below = _check_below(temp, temp_range[0], "Temperature", temp_range[1])
-    if below:
-        return below
-    above = _check_above(temp, temp_range[1], "Temperature", temp_range[0])
-    if above:
-        return above
-    warning = _check_warning(temp, near_low, near_high,
-                             "Approaching hypothermia",
-                             "Approaching hyperthermia")
-    if warning:
-        return warning
-    return True, None
+    return check_range_with_warnings(
+        temp,
+        temp_range[0],
+        temp_range[1],
+        "Temperature",
+        low_msg="Approaching hypothermia",
+        high_msg="Approaching hyperthermia",
+    )
 
 
 def check_pulse(pulse, pulse_range=(60, 100)):
-    near_low, near_high = get_warning_ranges(*pulse_range)
-    below = _check_below(pulse, pulse_range[0], "Pulse Rate", pulse_range[1])
-    if below:
-        return below
-    above = _check_above(pulse, pulse_range[1], "Pulse Rate", pulse_range[0])
-    if above:
-        return above
-    warning = _check_warning(pulse, near_low, near_high,
-                             "Approaching bradycardia",
-                             "Approaching tachycardia")
-    if warning:
-        return warning
-    return True, None
+    return check_range_with_warnings(
+        pulse,
+        pulse_range[0],
+        pulse_range[1],
+        "Pulse Rate",
+        low_msg="Approaching bradycardia",
+        high_msg="Approaching tachycardia",
+    )
 
 
 def check_spo2(spo2, spo2_min=90):
-    spo2_tolerance = (1.5 / 100) * spo2_min
+    # SpO₂ has only a lower bound
+    tolerance = (1.5 / 100) * spo2_min
     if spo2 < spo2_min:
         return False, f"Oxygen Saturation out of range! (min {spo2_min})"
-    if spo2_min < spo2 <= spo2_min + spo2_tolerance:
+    if spo2_min < spo2 <= spo2_min + tolerance:
         return True, "Warning: Approaching hypoxemia"
     return True, None
 
