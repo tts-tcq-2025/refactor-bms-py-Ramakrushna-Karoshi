@@ -74,11 +74,11 @@ def check_pulse(pulse, pulse_range=(60, 100)):
 
 
 def check_spo2(spo2, spo2_min=90):
-    """Check oxygen saturation; only lower bound and warning tolerance."""
+    """Check oxygen saturation; lower bound triggers warning if at minimum."""
     spo2_tolerance = (1.5 / 100) * spo2_min
     if spo2 < spo2_min:
         return False, f"Oxygen Saturation out of range! (min {spo2_min})"
-    if spo2_min < spo2 <= spo2_min + spo2_tolerance:
+    if spo2_min <= spo2 <= spo2_min + spo2_tolerance:
         return True, "Warning: Approaching hypoxemia"
     return True, None
 
