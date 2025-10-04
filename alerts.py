@@ -18,4 +18,3 @@ def alert_if_not_ok(msg, is_ok):
         animate_alert()
         return False
     return True
-
