@@ -8,7 +8,7 @@ def alert_on_failure(func):
             print(msg)
             if not ok:
                 animate_alert()
-        return ok  #Ensure return value propagates
+        return ok
     return wrapper
 
 
@@ -31,12 +31,8 @@ class Vitals:
 
     def status(self):
         return check_vitals_with_warning(
-            self.temperature,
-            self.pulse_rate,
-            self.spo2,
-            self.temp_range,
-            self.pulse_range,
-            self.spo2_min
+            self.temperature, self.pulse_rate, self.spo2,
+            self.temp_range, self.pulse_range, self.spo2_min
         )
 
     def check_and_alert(self):
